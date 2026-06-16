@@ -79,7 +79,6 @@ sap.ui.define([
                     });
 
                 },
-
                 _buildMonthTree: function () {
 
                     if (!this._salesOrders) {
