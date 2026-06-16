@@ -1,0 +1,39 @@
+.monthHeader {
+    background: #f5f6f7;
+    border: 1px solid #d9d9d9;
+    border-radius: 0.25rem;
+    min-height: 3rem;
+}
+
+.monthHeaderColumn {
+    padding: 0.75rem;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+}
+
+.monthBorderRight {
+    border-right: 1px solid #d9d9d9;
+}
+
+.monthHeaderText {
+    font-weight: bold;
+    font-size: 0.95rem;
+    color: #32363a;
+    white-space: nowrap;
+}
+
+.monthTree {
+    border: 1px solid #d9d9d9;
+    border-radius: 0.25rem;
+    background: #ffffff;
+}
+
+.monthTree .sapMTreeItemBase {
+    border-bottom: 1px solid #f0f0f0;
+    min-height: 2.8rem;
+}
+
+.monthTree .sapMTreeItemBase:hover {
+    background-color: #f5faff;
+}

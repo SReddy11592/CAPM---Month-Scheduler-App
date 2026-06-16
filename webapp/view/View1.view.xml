@@ -1,0 +1,301 @@
+<mvc:View
+    controllerName="scheduler.ui.schedulerui.controller.View1"
+    xmlns:mvc="sap.ui.core.mvc"
+    xmlns="sap.m"
+    xmlns:l="sap.ui.layout"
+    xmlns:unified="sap.ui.unified"
+>
+    <Page title="Month Scheduler Board">
+        <content>
+            <VBox class="sapUiSmallMargin">
+                <Toolbar>
+                    <Title text="Production Planning Board" />
+                    <ToolbarSpacer />
+                    <Button
+                        text="Refresh"
+                        icon="sap-icon://refresh"
+                        press=".onRefresh"
+                    />
+                </Toolbar>
+
+                <Toolbar>
+                    <Label text="Work Center" />
+
+                    <Input
+                        width="150px"
+                        placeholder="Work Center"
+                    />
+
+                    <ToolbarSpacer />
+
+                    <Button
+                        text="Search"
+                        icon="sap-icon://search"
+                    />
+
+                    <Button
+                        text="Refresh"
+                        icon="sap-icon://refresh"
+                        press=".onRefresh"
+                    />
+                </Toolbar>
+
+                <HBox
+                    justifyContent="SpaceAround"
+                    class="sapUiMediumMarginTop"
+                >
+                    <GenericTile header="Sales Orders">
+                        <TileContent>
+                            <NumericContent value="{statsModel>/salesCount}" />
+                        </TileContent>
+                    </GenericTile>
+
+                    <GenericTile header="Production Orders">
+                        <TileContent>
+                            <NumericContent
+                                value="{statsModel>/productionCount}"
+                            />
+                        </TileContent>
+                    </GenericTile>
+
+                    <GenericTile header="Executed">
+                        <TileContent>
+                            <NumericContent
+                                value="{statsModel>/executedCount}"
+                            />
+                        </TileContent>
+                    </GenericTile>
+
+                    <GenericTile header="Pending">
+                        <TileContent>
+                            <NumericContent
+                                value="{statsModel>/pendingCount}"
+                            />
+                        </TileContent>
+                    </GenericTile>
+                </HBox>
+
+                <l:Splitter height="850px">
+                    <l:contentAreas>
+                        <!-- LEFT PANEL -->
+
+                        <VBox
+                            width="25%"
+                            class="sapUiSmallMarginEnd"
+                        >
+                            <Title text="2025 Year Sales Orders" />
+
+                            <SearchField
+                                width="100%"
+                                liveChange=".onSearchSalesOrder"
+                            />
+
+                            <Tree
+                                id="scheduleTree"
+                                mode="SingleSelectMaster"
+                                itemPress=".onTreeItemPress"
+                                items="{
+        path:'treeModel>/months',
+        parameters:{
+            arrayNames:['nodes']
+        }
+    }"
+                            >
+                                <StandardTreeItem
+                                    title="{treeModel>title}"
+                                    type="Active"
+                                />
+                            </Tree>
+                        </VBox>
+
+                        <!-- RIGHT PANEL -->
+
+                        <VBox width="75%">
+                            <!-- Schedule Details -->
+
+                            <Title text="Schedule Details" />
+
+                            <Panel>
+                                <VBox class="sapUiSmallMargin">
+                                    <Text
+                                        text="Sales Order : {detailModel>/SalesOrder}"
+                                    />
+
+                                    <Text text="Year : {detailModel>/Year}" />
+
+                                    <Text
+                                        text="{
+        path:'detailModel>/Date',
+        formatter:'.formatter.formatDate'
+    }"
+                                    />
+
+                                    <Text
+                                        text="From Time : {
+                    path:'detailModel>/FromTime',
+                    formatter:'.formatter.formatTime'
+                }"
+                                    />
+
+                                    <Text
+                                        text="To Time : {
+                    path:'detailModel>/ToTime',
+                    formatter:'.formatter.formatTime'
+                }"
+                                    />
+                                </VBox>
+                            </Panel>
+
+                            <!-- Calendar -->
+
+                            <PlanningCalendar
+                                id="planningCalendar"
+                                viewKey="Hour"
+                                startDate="{detailModel>/startDate}"
+                                rows="{detailModel>/rows}"
+                            >
+                                <rows>
+                                    <PlanningCalendarRow
+                                        title="{detailModel>title}"
+                                        appointments="{detailModel>appointments}"
+                                    >
+                                        <appointments>
+                                            <unified:CalendarAppointment
+                                                title="{detailModel>title}"
+                                                text="{detailModel>text}"
+                                                startDate="{detailModel>startDate}"
+                                                endDate="{detailModel>endDate}"
+                                            />
+                                        </appointments>
+                                    </PlanningCalendarRow>
+                                </rows>
+                            </PlanningCalendar>
+
+                            <!-- Production Details -->
+
+                            <Title
+                                text="Production Order Details"
+                                class="sapUiSmallMarginTop"
+                            />
+
+                            <Panel>
+                                <VBox class="sapUiSmallMargin">
+                                    <Text
+                                        text="Production Order : {poDetailModel>/ProductionOrder}"
+                                    />
+
+                                    <Text
+                                        text="Sales Order : {poDetailModel>/SalesOrder}"
+                                    />
+
+                                    <Text
+                                        text="Status : {poDetailModel>/Status}"
+                                    />
+
+                                    <Text text="Date : {poDetailModel>/Date}" />
+                                </VBox>
+                            </Panel>
+
+                            <!-- Production Table -->
+
+                            <Title
+                                text="Production Orders"
+                                class="sapUiSmallMarginTop"
+                            />
+
+                            <Table
+                                id="productionTable"
+                                mode="SingleSelectMaster"
+                                selectionChange=".onProductionSelect"
+                                items="{productionModel>/orders}"
+                            >
+                                <columns>
+                                    <Column>
+                                        <Text text="Production Order" />
+                                    </Column>
+
+                                    <Column>
+                                        <Text text="Sales Order" />
+                                    </Column>
+
+                                    <Column>
+                                        <Text text="Status" />
+                                    </Column>
+
+                                    <Column>
+                                        <Text text="Created On" />
+                                    </Column>
+
+                                    <Column>
+                                        <Text text="Date" />
+                                    </Column>
+
+                                    <Column>
+                                        <Text text="From Time" />
+                                    </Column>
+
+                                    <Column>
+                                        <Text text="To Time" />
+                                    </Column>
+                                </columns>
+
+                                <items>
+                                    <ColumnListItem>
+                                        <cells>
+                                            <Text
+                                                text="{productionModel>ProductionOrder}"
+                                            />
+
+                                            <Text
+                                                text="{productionModel>SalesOrder}"
+                                            />
+
+                                            <ObjectStatus
+                                                text="Executed"
+                                                state="Success"
+                                            />
+
+                                            <Text
+                                                text="{
+        path:'productionModel>CreatedAt',
+        formatter:'.formatter.formatDateTime'
+    }"
+                                            />
+
+                                            <Text
+                                                text="{
+        path:'productionModel>Date',
+        formatter:'.formatter.formatDate'
+    }"
+                                            />
+
+                                            <Text
+                                                text="{
+        path:'productionModel>FromTime',
+        formatter:'.formatter.formatTime'
+    }"
+                                            />
+
+                                            <Text
+                                                text="{
+        path:'productionModel>ToTime',
+        formatter:'.formatter.formatTime'
+    }"
+                                            />
+                                        </cells>
+                                    </ColumnListItem>
+                                </items>
+                            </Table>
+
+                            <Button
+                                text="Download XLSM"
+                                icon="sap-icon://excel-attachment"
+                                press=".onDownload"
+                            />
+                        </VBox>
+                    </l:contentAreas>
+                </l:Splitter>
+            </VBox>
+        </content>
+    </Page>
+</mvc:View>
