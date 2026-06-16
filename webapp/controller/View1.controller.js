@@ -68,6 +68,7 @@ sap.ui.define([
                     oModel.read("/SalesOrderTypeSet", {
 
                         success: function (oData) {
+                            console.log("SubbaReddy");
 
                             this._salesOrders =
                                 oData.results;
