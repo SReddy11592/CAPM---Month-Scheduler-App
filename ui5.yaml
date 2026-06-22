@@ -32,13 +32,3 @@ server:
       configuration:
         flp:
           theme: sap_horizon
-
-resources:
-  configuration:
-    propertiesFileSourceEncoding: UTF-8
-
-builder:
-  resources:
-    excludes:
-      - "/test/**"
-      - "/localService/**"

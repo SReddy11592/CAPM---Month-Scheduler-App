@@ -12,7 +12,7 @@
     "resources": "resources.json",
     "dataSources": {
       "mainService": {
-        "uri": "/sap/opu/odata/sap/ZMONTH_SCHEDULER_SRV/",
+        "uri": "/sap/opu/odata/sap/ZMONTH_SCHEDULER_SRV/?sap-client=410",
         "type": "OData",
         "settings": {
           "odataVersion": "2.0"
