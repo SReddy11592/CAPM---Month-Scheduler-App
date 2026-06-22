@@ -359,7 +359,6 @@ sap.ui.define([
                         };
                     }
 
-                    // Edm.Time object
                     if (typeof vTime === "object" && vTime.ms !== undefined) {
 
                         var iTotalMinutes = Math.floor(vTime.ms / 60000);
@@ -370,7 +369,6 @@ sap.ui.define([
                         };
                     }
 
-                    // PT08H00M00S format
                     if (typeof vTime === "string") {
 
                         var aMatch = vTime.match(
@@ -394,101 +392,67 @@ sap.ui.define([
 
                 _loadCalendar: function (oSO) {
 
-                    console.log("FromTime:", oSO.FromTime);
-                    console.log("ToTime:", oSO.ToTime);
+                    console.log("Date:", oDate);
+                    console.log("Start:", oStart);
+                    console.log("End:", oEnd);
+                    console.log("Detail payload:", {
+                        SalesOrder: oSO.SalesOrder,
+                        startDate: oStart
+                    });
 
-                    var oFrom =
-                        this._convertTime(
-                            oSO.FromTime
-                        );
+                    console.log("Selected Order:", oSO);
 
-                    var oTo =
-                        this._convertTime(
-                            oSO.ToTime
-                        );
+                    var oFrom = this._convertTime(oSO.FromTime);
+                    var oTo = this._convertTime(oSO.ToTime);
 
-                    var sDate =
-                        oSO.Date;
+                    var oDate = oSO.Date;
 
-                    var oStart =
-                        new Date(
-                            sDate.substring(0, 4),
-                            sDate.substring(4, 6) - 1,
-                            sDate.substring(6, 8),
-                            oFrom.hour,
-                            oFrom.minute
-                        );
+                    if (!(oDate instanceof Date)) {
+                        oDate = new Date(oDate);
+                    }
 
-                    var oEnd =
-                        new Date(
-                            sDate.substring(0, 4),
-                            sDate.substring(4, 6) - 1,
-                            sDate.substring(6, 8),
-                            oTo.hour,
-                            oTo.minute
-                        );
+                    var oStart = new Date(
+                        oDate.getFullYear(),
+                        oDate.getMonth(),
+                        oDate.getDate(),
+                        oFrom.hour,
+                        oFrom.minute
+                    );
 
-                    this.getView()
-                        .getModel("detailModel")
-                        .setData({
+                    var oEnd = new Date(
+                        oDate.getFullYear(),
+                        oDate.getMonth(),
+                        oDate.getDate(),
+                        oTo.hour,
+                        oTo.minute
+                    );
 
-                            SalesOrder:
-                                oSO.SalesOrder,
+                    this.getView().getModel("detailModel").setData({
 
-                            Year:
-                                oSO.Year,
+                        SalesOrder: oSO.SalesOrder,
+                        Year: oSO.Year,
+                        Date: oDate,
+                        FromTime: oSO.FromTime,
+                        ToTime: oSO.ToTime,
 
-                            Date:
-                                oSO.Date,
+                        startDate: oStart,
 
-                            FromTime:
-                                oSO.FromTime,
+                        rows: [{
+                            title: oSO.SalesOrder,
 
-                            ToTime:
-                                oSO.ToTime,
+                            appointments: [{
+                                title: oSO.SalesOrder,
 
-                            startDate:
-                                oStart,
+                                text:
+                                    this.formatter.formatTime(oSO.FromTime) +
+                                    " - " +
+                                    this.formatter.formatTime(oSO.ToTime),
 
-                            rows: [
-
-                                {
-
-                                    title:
-                                        oSO.SalesOrder,
-
-                                    appointments: [
-
-                                        {
-
-                                            title:
-                                                oSO.SalesOrder,
-
-                                            text:
-                                                oFrom.hour +
-                                                ":" +
-                                                oFrom.minute +
-                                                " - " +
-                                                oTo.hour +
-                                                ":" +
-                                                oTo.minute,
-
-                                            startDate:
-                                                oStart,
-
-                                            endDate:
-                                                oEnd
-
-                                        }
-
-                                    ]
-
-                                }
-
-                            ]
-
-                        });
-
+                                startDate: oStart,
+                                endDate: oEnd
+                            }]
+                        }]
+                    });
                 },
 
                 _createProductionOrder: function (oSO) {
@@ -671,6 +635,11 @@ sap.ui.define([
 
                     var oExisting = this._isSalesOrderProcessed(
                         oNode.data.SalesOrder
+                    );
+
+                    // NEW CODE
+                    this.getView().getModel("poDetailModel").setData(
+                        oExisting || {}
                     );
 
                     if (oExisting) {

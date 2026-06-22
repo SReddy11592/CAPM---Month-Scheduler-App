@@ -4,6 +4,7 @@
     xmlns="sap.m"
     xmlns:l="sap.ui.layout"
     xmlns:unified="sap.ui.unified"
+    xmlns:pc="sap.m"
 >
     <Page title="Month Scheduler Board">
         <content>
@@ -153,18 +154,30 @@
                                 viewKey="Hour"
                                 startDate="{detailModel>/startDate}"
                                 rows="{detailModel>/rows}"
+                                showWeekNumbers="false"
                             >
+                                <views>
+                                    <PlanningCalendarView
+                                        key="Hour"
+                                        intervalType="Hour"
+                                        description="Hours"
+                                        intervalsS="8"
+                                        intervalsM="12"
+                                        intervalsL="12"
+                                    />
+                                </views>
+
                                 <rows>
                                     <PlanningCalendarRow
-                                        title="{detailModel>title}"
-                                        appointments="{detailModel>appointments}"
+                                        title="{title}"
+                                        appointments="{appointments}"
                                     >
                                         <appointments>
                                             <unified:CalendarAppointment
-                                                title="{detailModel>title}"
-                                                text="{detailModel>text}"
-                                                startDate="{detailModel>startDate}"
-                                                endDate="{detailModel>endDate}"
+                                                title="{title}"
+                                                text="{text}"
+                                                startDate="{startDate}"
+                                                endDate="{endDate}"
                                             />
                                         </appointments>
                                     </PlanningCalendarRow>
@@ -192,7 +205,33 @@
                                         text="Status : {poDetailModel>/Status}"
                                     />
 
-                                    <Text text="Date : {poDetailModel>/Date}" />
+                                    <Text
+                                        text="Date : {
+        path:'poDetailModel>/Date',
+        formatter:'.formatter.formatDate'
+    }"
+                                    />
+
+                                    <Text
+                                        text="From Time : {
+        path:'poDetailModel>/FromTime',
+        formatter:'.formatter.formatTime'
+    }"
+                                    />
+
+                                    <Text
+                                        text="To Time : {
+        path:'poDetailModel>/ToTime',
+        formatter:'.formatter.formatTime'
+    }"
+                                    />
+
+                                    <Text
+                                        text="Created On : {
+        path:'poDetailModel>/CreatedAt',
+        formatter:'.formatter.formatDateTime'
+    }"
+                                    />
                                 </VBox>
                             </Panel>
 

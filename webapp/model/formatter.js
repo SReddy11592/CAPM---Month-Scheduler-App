@@ -18,15 +18,19 @@ sap.ui.define([
             }).format(oDate);
         },
 
-        formatDate: function (sDate) {
+        formatDate: function (vDate) {
 
-            if (!sDate || sDate.length !== 8) {
+            if (!vDate) {
                 return "";
             }
 
-            return sDate.substring(6, 8) + "-" +
-                sDate.substring(4, 6) + "-" +
-                sDate.substring(0, 4);
+            var oDate = vDate instanceof Date
+                ? vDate
+                : new Date(vDate);
+
+            return DateFormat.getDateInstance({
+                pattern: "dd-MM-yyyy"
+            }).format(oDate);
         },
 
         formatTime: function (vTime) {
@@ -35,7 +39,6 @@ sap.ui.define([
                 return "";
             }
 
-            // Handle Edm.Time object
             if (typeof vTime === "object" && vTime.ms !== undefined) {
 
                 var iTotalMinutes = Math.floor(vTime.ms / 60000);
@@ -48,7 +51,6 @@ sap.ui.define([
                     String(iMinutes).padStart(2, "0");
             }
 
-            // Handle duration string PT08H00M00S
             if (typeof vTime === "string") {
 
                 var aMatch = vTime.match(
